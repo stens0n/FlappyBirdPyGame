@@ -16,7 +16,8 @@ def create_pipe():
 def move_pipes(pipes):
     for pipe in pipes:
         pipe.centerx -= 5
-    return pipes
+    visible_pipes = [pipe for pipe in pipes if pipe.right > -44.44]
+    return visible_pipes
 
 
 def draw_pipes(pipes):
@@ -31,6 +32,7 @@ def draw_pipes(pipes):
 def check_collision(pipes):
     for pipe in pipes:
         if bird_rect.colliderect(pipe):
+            can_score = True
             death_sound.play()
             return False
 
@@ -71,6 +73,18 @@ def update_score(score, high_score):
         high_score = score
     return high_score
 
+
+def pipe_score_check():
+    global score, can_score
+
+    if pipe_list:
+        for pipe in pipe_list:
+            if 95 < pipe.centerx < 105 and can_score:
+                score += 1
+                can_score = False
+            if pipe.centerx < 0:
+                can_score = True
+
 pygame.init()
 screen = pygame.display.set_mode((576, 990))
 clock = pygame.time.Clock()
@@ -82,6 +96,7 @@ bird_movement = 0
 game_active = True
 score = 0
 high_score = 0
+can_score = True
 
 bg_surface = pygame.image.load('assets/background-day.png').convert()
 bg_surface = pygame.transform.scale2x(bg_surface)
@@ -110,7 +125,7 @@ pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [388, 410, 461, 555, 680, 800]
+pipe_height = [388, 401.11, 410, 461, 502.55, 522.32, 555, 600.58, 680, 800]
 
 game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message-removebg-preview.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center=(288, 445))
@@ -162,7 +177,7 @@ while True:
         pipe_list = move_pipes(pipe_list)
         draw_pipes(pipe_list)
 
-        score += 0.01
+        pipe_score_check()
         score_display('main_game')
 
     else:
