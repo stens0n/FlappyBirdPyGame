@@ -129,7 +129,7 @@ pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [401.11, 410, 461, 502.55, 522.32, 555, 600.58, 680]
+pipe_height = [401.11, 410.15, 461.66, 502.55, 522.32, 555, 600.58, 615.11, 680]
 
 game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message-removebg-preview.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center=(288, 445))
