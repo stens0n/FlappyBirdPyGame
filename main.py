@@ -2,8 +2,8 @@ import pygame, sys, random
 
 
 def draw_floor():
-    screen.blit(floor_surface, (floor_x_pos, 850))
-    screen.blit(floor_surface, (floor_x_pos + 576, 850))
+    screen.blit(floor_surface, (floor_x_pos, 790))
+    screen.blit(floor_surface, (floor_x_pos + 576, 790))
 
 
 def create_pipe():
@@ -30,13 +30,16 @@ def draw_pipes(pipes):
 
 
 def check_collision(pipes):
+    global can_score
+
     for pipe in pipes:
         if bird_rect.colliderect(pipe):
             can_score = True
             death_sound.play()
             return False
 
-    if bird_rect.top <= -100 or bird_rect.bottom >= 850:
+    if bird_rect.top <= -100 or bird_rect.bottom >= 790:
+        can_score = True
         return False
 
     return True
@@ -79,14 +82,15 @@ def pipe_score_check():
 
     if pipe_list:
         for pipe in pipe_list:
-            if 95 < pipe.centerx < 105 and can_score:
+            if 95 < pipe.centerx < 101 and can_score:
                 score += 1
                 can_score = False
             if pipe.centerx < 0:
                 can_score = True
 
 pygame.init()
-screen = pygame.display.set_mode((576, 990))
+pygame.display.set_caption('Flappy Fridge by DJStens')
+screen = pygame.display.set_mode((576, 902))
 clock = pygame.time.Clock()
 game_font = pygame.font.Font('04B_19.ttf', 40)
 
@@ -111,7 +115,7 @@ bird_upflap = pygame.transform.scale2x(pygame.image.load('assets/latest(1).png')
 bird_frames = [bird_downflap, bird_midflap, bird_upflap]
 bird_index = 0
 bird_surface = bird_frames[bird_index]
-bird_rect = bird_surface.get_rect(center=(100, 445))
+bird_rect = bird_surface.get_rect(center=(100, 466))
 
 BIRDFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(BIRDFLAP, 200)
@@ -125,7 +129,7 @@ pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [388, 401.11, 410, 461, 502.55, 522.32, 555, 600.58, 680, 800]
+pipe_height = [401.11, 410, 461, 502.55, 522.32, 555, 600.58, 680]
 
 game_over_surface = pygame.transform.scale2x(pygame.image.load('assets/message-removebg-preview.png').convert_alpha())
 game_over_rect = game_over_surface.get_rect(center=(288, 445))
@@ -143,7 +147,7 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_active:
                 bird_movement = 0
-                bird_movement -= 9.5
+                bird_movement -= 11.12
                 flap_sound.play()
             if event.key == pygame.K_SPACE and game_active == False:
                 game_active = True
@@ -190,7 +194,7 @@ while True:
     draw_floor()
     if floor_x_pos <= -576:
         floor_x_pos = 0
-    screen.blit(floor_surface, (floor_x_pos, 850))
+    screen.blit(floor_surface, (floor_x_pos, 790))
 
     pygame.display.update()
     clock.tick(120)
